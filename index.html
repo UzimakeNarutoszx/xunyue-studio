@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>灵感站 · 离线音乐工作台</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">♫</span><span>灵感站</span><small>OFFLINE STUDIO</small></div>
+      <div class="transport">
+        <button class="icon-btn" id="rewindBtn" title="回到开头" aria-label="回到开头">↤</button>
+        <button class="icon-btn play" id="playBtn" title="播放 / 暂停" aria-label="播放或暂停">▶</button>
+        <button class="icon-btn" id="stopBtn" title="停止" aria-label="停止">■</button>
+        <span class="transport-state" id="transportState">准备就绪</span>
+      </div>
+      <div class="project-meta">
+        <input id="projectName" value="晴天练习曲" aria-label="项目名称" />
+        <span class="save-state" id="saveState">已保存</span>
+      </div>
+      <div class="global-controls">
+        <label>速度 <input id="bpmInput" type="number" min="40" max="220" value="120" /></label>
+        <label>调性 <select id="keySelect"><option value="C">C</option><option value="G" selected>G</option><option value="D">D</option><option value="A">A</option><option value="F">F</option></select></label>
+        <button class="new-btn" id="newProjectBtn">新建</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="tracks-panel panel">
+        <div class="section-bar"><div><p class="eyebrow">ARRANGEMENT</p><h2>轨道 <span id="trackCount">3</span></h2></div><button class="add-btn" id="addTrackBtn"><span>＋</span> 添加轨道</button></div>
+        <div class="track-head"><span>乐器</span><span>音量</span><span>声像</span><span>状态</span></div>
+        <div id="trackList" class="track-list"></div>
+        <div class="hint"><span>⌘</span> 点击时间线格子添加音符 · 再次点击移除</div>
+      </section>
+
+      <section class="timeline-panel panel">
+        <div class="timeline-toolbar"><div><p class="eyebrow">PIANO ROLL</p><h2>编曲时间线</h2></div><div class="timeline-tools"><span id="positionLabel">小节 1 · 拍 1</span><button id="zoomOut" title="缩小时间线">−</button><button id="zoomIn" title="放大时间线">＋</button></div></div>
+        <div class="timeline-scroll"><div class="timeline" id="timeline"></div></div>
+        <div class="timeline-footer"><span>1</span><span>2</span><span>3</span><span>4</span><span>…</span><span>16</span><small>16 小节 · 64 拍</small></div>
+        <div class="timeline-scrubber"><span>浏览乐段</span><input id="timelineRange" type="range" min="0" max="100" value="0" step="1" aria-label="拖动浏览完整乐段" /><span class="scrub-hint">拖动查看后续小节</span></div>
+        <div class="keyboard-dock"><div class="keyboard-label"><span>MIDI KEYBOARD</span><small>点击琴键试听并录入音符</small></div><div class="keyboard" id="keyboard" aria-label="88 键 MIDI 模拟键盘"></div></div>
+      </section>
+
+      <aside class="inspiration-panel panel">
+        <div class="panel-heading"><div><p class="eyebrow">TODAY'S SPARK</p><h1>找一点灵感</h1></div><span class="status-dot"></span></div>
+        <p class="muted intro">把此刻的天气、情绪或场景写下来，给它一段能被听见的回应。</p>
+        <form id="inspirationForm" class="inspiration-form">
+          <label for="sceneInput">此刻是什么感觉？</label>
+          <div class="input-wrap"><input id="sceneInput" placeholder="例如：今天是晴天" autocomplete="off" /><button type="submit" title="生成灵感" aria-label="生成灵感">↗</button></div>
+        </form>
+        <div class="suggestion-row"><button class="chip" data-scene="晴天">晴天</button><button class="chip" data-scene="夜晚">夜晚</button><button class="chip" data-scene="咖啡馆">咖啡馆</button><button class="chip" data-scene="忧郁">忧郁</button></div>
+        <section class="spark-card" id="sparkCard">
+          <div class="spark-top"><span class="spark-icon">✦</span><span id="sparkLabel">晴天 · 清晨</span><button id="refreshSpark" title="换一个灵感" aria-label="换一个灵感">⟳</button></div>
+          <h2 id="sparkTitle">一束 G 和弦的阳光</h2>
+          <p id="sparkCopy">让明亮的 G 大调从第一拍落下，像窗帘被风轻轻推开。</p>
+          <div class="spark-stats"><div><span>调性</span><strong id="sparkKey">G 大调</strong></div><div><span>速度</span><strong id="sparkBpm">120 BPM</strong></div><div><span>进行</span><strong id="sparkProgression">G · D · Em · C</strong></div></div>
+          <button class="apply-btn" id="applySpark">应用到编曲 <span>→</span></button>
+        </section>
+        <div class="recent-title"><span>最近灵感</span><button id="clearRecent">清除</button></div>
+        <div class="recent-list" id="recentList"></div>
+      </aside>
+    </main>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>
